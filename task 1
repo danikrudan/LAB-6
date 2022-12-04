@@ -1,0 +1,119 @@
+#define _CRT_SECURE_NO_WARNINGS
+ 
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <malloc.h>
+#include <time.h>
+ 
+ 
+int get_int(const char* msg) {
+    int number;
+    printf("%s", msg);
+    while (scanf("%d", &number) != 1 || getchar() != '\n') {
+        printf("Ошибка!\n");
+        rewind(stdin);
+        printf("%s", msg);
+    }
+ 
+    return number;
+}
+ 
+ 
+int* create_array(int array_length) {
+    int* numbers;
+    int i;
+    numbers = (int*)malloc(array_length * sizeof(int));
+    srand(time(NULL));
+    for (int j = 0; j < array_length; ++j) {
+        numbers[j] = rand() % 100;
+    }
+ 
+    return numbers;
+}
+ 
+int* sort(int* numbers, int first, int last) {
+    int i, j, x, temp;
+    i = first;
+    j = last;
+    x = numbers[(first + last) / 2];
+ 
+    do {
+        while (numbers[i] < x) i++;
+        while (numbers[j] > x) j--;
+ 
+        if (i <= j) {
+            if (numbers[i] > numbers[j]) {
+                temp = numbers[i];
+                numbers[i] = numbers[j];
+                numbers[j] = temp;
+            }
+            i++;
+            j--;
+        }
+    } while (i <= j);
+ 
+    if (i < last)
+        sort(numbers, i, last);
+    if (first < j)
+        sort(numbers, first, j);
+    return numbers;
+}
+ 
+int* extract_even(int* numbers, int array_length){
+    int* new_numbers = (int*)malloc(array_length * sizeof(int));
+    int c = 0;
+    for (int i = 1; i <= array_length; i+=2)
+    {
+        new_numbers[c] = numbers[i];
+        c++;
+    }
+    return new_numbers;
+}
+ 
+int* merge_arrays(int* not_even_numbers, int* even_numbers, int array_length) {
+    int* final_array = (int*)malloc(array_length * sizeof(int));
+    int count_even, count_not_even;
+    count_even = count_not_even = 0;
+ 
+    for (int i = 0; i < array_length; i++)
+    {
+        if ((i + 1) % 2 == 0) {
+            final_array[i] = even_numbers[count_even];
+            count_even++;
+        }
+        if ((i + 1) % 2 != 0) {
+            final_array[i] = not_even_numbers[count_not_even];
+            count_not_even+=2;
+        }
+    }
+ 
+    return final_array;
+}
+ 
+void print_array(int* numbers, int array_length) {
+    int i;
+    for (int i = 0; i < array_length; i++) {
+        printf("%5d", numbers[i]);
+    }
+}
+ 
+int main() {
+    setlocale(LC_ALL, "rus");
+    int array_length = get_int("Введите длину массива: ");
+    int* numbers = create_array(array_length);
+    printf("Старый массив: \n");
+    print_array(numbers, array_length);
+    printf("\nНовый массив: \n");
+ 
+    clock_t start, end;
+    int* even_numbers = extract_even(numbers, array_length);
+    int* sorted_even_numbers = sort(even_numbers, 0, array_length / 2 - 1);
+    start = clock();
+    int* final_numbers = merge_arrays(numbers, sorted_even_numbers, array_length);
+    print_array(final_numbers, array_length);
+    end = clock();
+    printf("\n\nСортировка выполнена за %lf секунд", (end - start) / (CLOCKS_PER_SEC));
+ 
+    return 0;
+}
