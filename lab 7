@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
  
-#define MAX_LEN 100
+#define MAX_LEN 1000
  
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,9 +22,9 @@ int get_int(const char* msg) {
  
 int get_count_words(char* s) {
     int i, word, is_blank;
-    i = 0;  // schetchik
-    word = 1; // col vo slov
-    is_blank = 1; // flag proveerka est' li slova
+    i = 0;
+    word = 1;
+    is_blank = 1;
  
     while (s[i] != '\0')
     {
@@ -38,7 +38,6 @@ int get_count_words(char* s) {
                 word++;
             }
             else {
-              
                 is_blank = 0;
             }
  
@@ -54,7 +53,7 @@ char* duplicate_char(char* s)
     printf("Введите символ для удвоения: ");
     scanf("%c", &c);
  
-    size_t n = 0;
+    int n = 0;
  
     for (const char* p = s; *p; ++p)
     {
@@ -67,7 +66,7 @@ char* duplicate_char(char* s)
     {
         if (n == 0)
         {
-            strcpy(nouvelle, s); // copy str esli net simvola
+            strcpy(nouvelle, s);
         }
         else
         {
@@ -94,34 +93,34 @@ void main() {
  
     switch (option)
     {
-        case 1:
-            printf("Введите строку: ");
-            int (*count_words)(char*) = NULL; // ykazatel'na f(x)
-            count_words = get_count_words;
-            int result;
+    case 1:
+        printf("Введите строку: ");
+        int (*count_words)(char*) = NULL;
+        count_words = get_count_words;
+        int result;
  
-            char* string = (char*)malloc(MAX_LEN * sizeof(char)); // new str
+        char* string = (char*)malloc(MAX_LEN * sizeof(char));
  
-            fgets(string, sizeof string, stdin);
+        fgets(string, MAX_LEN, stdin);
  
-            result = count_words(string);
-            printf("Количество слов в строке - %d\n", result);
+        result = count_words(string);
+        printf("Количество слов в строке - %d\n", result);
  
-            break;
-        case 2:
-            printf("Введите строку: ");
-            char* (*duplicate)(char*) = NULL;
-            duplicate = duplicate_char;
-            char* result2;
+        break;
+    case 2:
+        printf("Введите строку: ");
+        char* (*duplicate)(char*) = NULL;
+        duplicate = duplicate_char;
+        char* result2;
  
-            char* string2 = (char*)malloc(MAX_LEN * sizeof(char));
+        char* string2 = (char*)malloc(MAX_LEN * sizeof(char));
  
-            fgets(string2, sizeof string2, stdin);
+        fgets(string2, MAX_LEN, stdin);
  
-            result2 = duplicate(string2);
-            printf("Измененная строка - %s\n", result2);
+        result2 = duplicate(string2);
+        printf("Измененная строка - %s\n", result2);
  
-            break;
+        break;
     default:
         printf("Такого варианта нет");
     }
