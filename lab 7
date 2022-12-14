@@ -33,7 +33,7 @@ int get_count_words(char* s) {
             word--;
         }
         else {
-            if (s[i] == ' ')
+            if (s[i] == ' ' && s[i + 1] != ' ')
             {
                 word++;
             }
